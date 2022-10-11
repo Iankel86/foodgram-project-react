@@ -4,15 +4,18 @@ from recipes.models import Tag
 
 
 class Command(BaseCommand):
-    help = "Loads tags"
+    help = "Создание тегов в БД."
 
     def handle(self, *args, **kwargs):
         data = [
-            {"name": "завтрак", "color": "#E26C2D", "slug": "breakfast"},
-            {"name": "обед", "color": "#49B64E", "slug": "dinner"},
-            {"name": "ужин", "color": "#8775D2", "slug": "supper"},
+            {"name": "Завтрак", "color": "#E26C2D", "slug": "breakfast"},
+            {"name": "Обед", "color": "#49B64E", "slug": "dinner"},
+            {"name": "Полдник", "color": "#CD853F", "slug": "snack"},
+            {"name": "Ужин", "color": "#9ACD32", "slug": "lunch"},
+            {"name": "Праздник", "color": "#FF6347", "slug": "holiday"},
+            {"name": "Спорт", "color": "#8775D2", "slug": "sport"},
         ]
         Tag.objects.bulk_create(Tag(**tag) for tag in data)
         self.stdout.write(
-            self.style.SUCCESS("***Tags were succesfully loaded***")
+            self.style.SUCCESS("Теги загружены в БД!")
         )

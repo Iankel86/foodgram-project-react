@@ -6,7 +6,7 @@ from recipes.models import Ingredient
 
 
 class Command(BaseCommand):
-    help = "Loads ingredients from /data"
+    help = "Загружает ингридиенты из /data"
 
     def handle(self, *args, **options):
         with open(
@@ -19,5 +19,5 @@ class Command(BaseCommand):
                 Ingredient(**data) for data in reader
             )
         self.stdout.write(
-            self.style.SUCCESS("***Ingredients were succesfully loaded***")
+            self.style.SUCCESS("Ингридиенты успешно загружены!")
         )
