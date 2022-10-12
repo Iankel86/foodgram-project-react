@@ -1,32 +1,8 @@
-# from django.core import validators
 from django.core.validators import (MinValueValidator, MaxValueValidator,
                                     RegexValidator)
 from django.db import models
 from users.models import User
 
-# ORANGE = "#E26C2D"
-# GREEN = "#49B64E"
-# PURPLE = "#8775D2"
-
-# CHOICES = ((ORANGE, "оранжевый"), (GREEN, "зелёный"), (PURPLE, "фиолетовый"))
-
-
-# class Tag(models.Model):
-#     """Модель тега"""
-#     name = models.CharField("Тэг", max_length=200, unique=True, blank=False)
-#     color = models.CharField(
-#         "Цвет тэга", max_length=7, choices=CHOICES, unique=True, blank=False
-#     )
-#     slug = models.SlugField(
-#         "Slug тэга", max_length=200, unique=True, blank=False
-#     )
-
-#     class Meta:
-#         verbose_name = "Тэг"
-#         verbose_name_plural = "Тэги"
-
-#     def __str__(self):
-#         return self.name
 
 class Tag(models.Model):
     """Модель тега"""
@@ -34,7 +10,8 @@ class Tag(models.Model):
                             'Название Тега',
                             unique=True,
                             max_length=50,
-                            blank=False)
+                            blank=False
+    )
     color = models.CharField(
         'Цветовой HEX-код',
         unique=True,
@@ -49,7 +26,8 @@ class Tag(models.Model):
     slug = models.SlugField(
                             'Уникальный слаг',
                             unique=True,
-                            max_length=50)
+                            max_length=50
+    )
 
     class Meta:
         verbose_name = 'Тег'
@@ -90,7 +68,7 @@ class Recipe(models.Model):
     )
     ingredients = models.ManyToManyField(
         Ingredient,
-        through='IngredientInRecipe',
+        through='AmountIngredient',
         related_name='recipes',
         verbose_name='Ингредиенты'
     )
@@ -206,6 +184,3 @@ class ShoppingCart(models.Model):
                 name='unique_recipe_in_shopping_cart',
             )
         ]
-
-    def __str__(self):
-        return f'{self.user} добавил "{self.recipe}" в Корзину покупок'

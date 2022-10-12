@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin import display
 
 from .models import AmountIngredient, Ingredient, Recipe, Tag
 
@@ -32,10 +31,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author', 'name', 'tags',)
     inlines = (AmountIngredientInline,)
     empty_value_display = '-пусто-'
-    # def get_in_favorites(self, obj):
-    #     return obj.favorite_recipe.count()
 
-    # get_in_favorites.short_description = 'В избранных'
-    @display(description='Количество в избранных')
-    def added_in_favorites(self, obj):
-        return obj.favorites.count()
+    def get_in_favorites(self, obj):
+        return obj.favorite_recipe.count()
+    get_in_favorites.short_description = 'В избранных'
