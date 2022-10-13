@@ -62,6 +62,7 @@ class Follow(models.Model):
     )
 
     class Meta:
+        ordering = ('-id',)
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
         constraints = [
@@ -70,3 +71,6 @@ class Follow(models.Model):
                 name='unique_subscription',
             )
         ]
+
+    def __str__(self):
+        return f'{self.user} подписн на {self.author}'
