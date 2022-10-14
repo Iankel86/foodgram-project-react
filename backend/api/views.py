@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django.db.models.expressions import Exists, OuterRef
 from django.http import HttpResponse
@@ -66,60 +65,29 @@ class UsersViewSet(UserViewSet):
     )
     def subscribe(self, request, id):
         author = get_object_or_404(User, id=id)
-
+        user = request.user
         if request.method == 'POST':
-            if request.user.id == author.id:
-                raise ValidationError(
-                    'Вы не можете подписаться на свой аккаунт'
-                )
-            else:
-                serializer = FollowSerializer(
-                    Follow.objects.create(user=request.user, author=author),
-                    context={'request': request},
-                )
+            if user == author:
                 return Response(
-                    serializer.data, status=status.HTTP_201_CREATED
-                )
-        elif request.method == 'DELETE':
-            if Follow.objects.filter(
-                user=request.user, author=author
-            ).exists():
-                Follow.objects.filter(
-                    user=request.user, author=author
-                ).delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            else:
+                    {'errors': 'Вы не можете подписаться на свой аккаунт'},
+                    status.HTTP_400_BAD_REQUEST
+                    )
+            if Follow.objects.filter(user=user, author=author).exists():
+                return Response(
+                    {'errors': 'Уже подписался'}, status.HTTP_400_BAD_REQUEST)
+            follow = Follow.objects.create(user=user, author=author)
+            serializer = FollowSerializer(
+                follow, context={'request': request}
+            )
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        if request.method == 'DELETE':
+            if not Follow.objects.filter(user=user, author=author).exists():
                 return Response(
                     {'errors': 'Автор отсутсвует в списке подписок'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        
-        # if request.method == 'POST':
-        #     if request.user.id == author.id:
-        #         raise ValidationError(
-        #             'Вы не можете подписаться на свой аккаунт'
-        #         )
-        #     else:
-        #         serializer = FollowSerializer(
-        #             Follow.objects.create(user=request.user, author=author),
-        #             context={'request': request},
-        #         )
-        #         return Response(
-        #             serializer.data, status=status.HTTP_201_CREATED
-        #         )
-        # elif request.method == 'DELETE':
-        #     if Follow.objects.filter(
-        #         user=request.user, author=author
-        #     ).exists():
-        #         Follow.objects.filter(
-        #             user=request.user, author=author
-        #         ).delete()
-        #         return Response(status=status.HTTP_204_NO_CONTENT)
-        #     else:
-        #         return Response(
-        #             {'errors': 'Автор отсутсвует в списке подписок'},
-        #             status=status.HTTP_400_BAD_REQUEST,
-        #         )
+                    status.HTTP_400_BAD_REQUEST
+                    )
+            Follow.objects.filter(user=user, author=author).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RecipesViewSet(viewsets.ModelViewSet):
@@ -172,7 +140,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 user=self.request.user, recipe=recipe
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        elif request.method == 'DELETE':
+        if request.method == 'DELETE':
             if FavoriteRecipe.objects.filter(
                 user=self.request.user, recipe=recipe
             ).exists():
@@ -180,11 +148,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     user=self.request.user, recipe=recipe
                 ).delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response(
-                    {'errors': 'Рецепт отсутсвует в списке избранных'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
 
     @action(
         methods=['POST', 'DELETE'],
@@ -197,7 +160,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             serializer = FavoriteOrShoppingRecipeSerializer(recipe)
             ShoppingCart.objects.create(user=self.request.user, recipe=recipe)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        elif request.method == 'DELETE':
+        if request.method == 'DELETE':
             if ShoppingCart.objects.filter(
                 user=self.request.user, recipe=recipe
             ).exists():
@@ -205,7 +168,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     user=self.request.user, recipe=recipe
                 ).delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            else:
+            if request.method != 'DELETE':
                 return Response(
                     {'errors': 'Рецепт отсутсвует в списке покупок'},
                     status=status.HTTP_400_BAD_REQUEST,
