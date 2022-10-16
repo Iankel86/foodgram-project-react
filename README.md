@@ -1,4 +1,3 @@
-# Foodgram
 ![Foodgram workflow](https://github.com/Iankel86/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
 ![](https://img.shields.io/badge/Python-3.7.0-blue?style=flat&logo=python&logoColor=white)
