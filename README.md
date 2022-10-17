@@ -1,5 +1,5 @@
 ![https://github.com/Iankel86](https://img.shields.io/badge/Developed%20by-Iankel86-blue) 
-![Foodgram Workflow Status](https://github.com/Iankel86/foodgram-project-react/actions/workflows/main.yml/badge.svg?branch=master&event=push)
+![Foodgram Workflow Status](https://github.com/Iankel86/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg?branch=master&event=push)
 
 ![](https://img.shields.io/badge/Python-3.7.0-blue?style=flat&logo=python&logoColor=white)
 ![](https://img.shields.io/badge/Django-3.2.15-orange?style=flat&logo=django&logoColor=white)
