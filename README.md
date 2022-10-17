@@ -1,4 +1,5 @@
-![Foodgram workflow](https://github.com/Iankel86/foodgram-project-react/actions/workflows/main.yml/badge.svg)
+![https://github.com/Iankel86](https://img.shields.io/badge/Developed%20by-Iankel86-blue) 
+![Foodgram Workflow Status](https://github.com/Iankel86/foodgram-project-react/actions/workflows/main.yml/badge.svg?branch=master&event=push)
 
 ![](https://img.shields.io/badge/Python-3.7.0-blue?style=flat&logo=python&logoColor=white)
 ![](https://img.shields.io/badge/Django-3.2.15-orange?style=flat&logo=django&logoColor=white)
@@ -8,6 +9,13 @@
 
 **Foodgram** - приложение в котором пользователи могут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов. Сервис «Foodgram» позволяет пользователям создавать список продуктов, которые нужно купить для приготовления выбранных блюд.
 
+Проект развернут по адресу [84.201.140.81](http://84.201.140.81/)
+
+Адрес электронной почты: yankelll86@mail.ru
+Username: admin
+Имя пользователя: admin
+Фамилия пользователя: admin
+Password: 29082022
 
 ## ⚙ Используемые технологии:
 

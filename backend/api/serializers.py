@@ -13,7 +13,7 @@ from users.models import Follow, User
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'name', 'color', 'slug')
+        fields = ('id', 'name', 'color', 'slug',)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -115,16 +115,20 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         ingredients = data['ingredients']
-        if len(set(ingredients)) != len(ingredients):
-            raise serializers.ValidationError(
+        unique_set = set()
+        for ingredient_data in ingredients:
+            current_ingredient = ingredient_data['id']
+            if current_ingredient in unique_set:
+                raise serializers.ValidationError(
                     'В списке ингредиентов - два одинаковых значения.'
                     ' Проверьте состав.'
                 )
+            unique_set.add(current_ingredient)
         return data
 
     def create_amount_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            AmountIngredient.objects.bulk_create(
+            AmountIngredient.objects.create(
                 recipe=recipe,
                 ingredient=ingredient.get('id'),
                 amount=ingredient.get('amount'),

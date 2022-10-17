@@ -132,15 +132,15 @@ class RecipesViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,),
     )
     def favorite(self, request, pk):
-        recipe_pk = self.kwargs.get('pk')
+        recipe_pk = self.kwargs.get("pk")
         recipe = get_object_or_404(Recipe, pk=recipe_pk)
-        if request.method == 'POST':
+        if request.method == "POST":
             serializer = FavoriteOrShoppingRecipeSerializer(recipe)
             FavoriteRecipe.objects.create(
                 user=self.request.user, recipe=recipe
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        if request.method == 'DELETE':
+        elif request.method == "DELETE":
             if FavoriteRecipe.objects.filter(
                 user=self.request.user, recipe=recipe
             ).exists():
@@ -148,6 +148,11 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     user=self.request.user, recipe=recipe
                 ).delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(
+                    {"errors": "Рецепт отсутсвует в списке избранных"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
     @action(
         methods=['POST', 'DELETE'],
