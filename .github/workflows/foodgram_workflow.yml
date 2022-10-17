@@ -42,13 +42,13 @@ jobs:
             with:
               context: backend/
               push: true
-              tags: kondrrr/foodgram_backend:latest
+              tags: yankelll/foodgram_backend:latest
           - name: Push frontend
             uses: docker/build-push-action@v2 
             with:
               context: frontend/
               push: true
-              tags: kondrrr/foodgram_frontend:latest
+              tags: yankelll/foodgram_frontend:latest
 
   deploy:
       runs-on: ubuntu-latest
